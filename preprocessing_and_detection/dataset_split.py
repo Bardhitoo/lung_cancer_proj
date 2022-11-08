@@ -5,13 +5,11 @@ import random
 import pickle
 
 matplotlib.use('TkAgg')  # TODO: Experiment this on another env. of conda
-import matplotlib.pyplot as plt
-import SimpleITK as sitk
 
 from sklearn.model_selection import train_test_split
 
 SCAN_PATH = "../data/subset0"
-CANDIDATE_FILE_PATH = "../data/candidates.csv"
+CANDIDATE_FILE_PATH = "../data/candidates_V2.csv"
 
 
 def main():
@@ -29,6 +27,9 @@ def main():
     # Filter out instances that I don't have on my local machine
     my_candidates = filter_no_downloads(total_candidates, SCAN_PATH)
 
+    #  TODO: Separate positive & negative cases by patient id
+    # Dont want to have samples of patients split into train and test
+
     # Get positive and negative instances
     positive_cases = my_candidates[my_candidates["class"] == 1]
     negative_cases = my_candidates[my_candidates["class"] == 0]
@@ -40,20 +41,16 @@ def main():
     my_candidates_df_idx = [list(positive_cases.index) + list(negative_cases.index)][0]
     my_candidates_df = total_candidates.loc[my_candidates_df_idx]
 
-    X = my_candidates.iloc[:, :-1]
-    y = my_candidates.iloc[:, -1]
+    X = my_candidates_df.iloc[:, :-1]
+    y = my_candidates_df.iloc[:, -1]
 
     # train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True, random_state=42)
-    split_dataset = {"X_train": X_train, "X_test": X_test, "y_train": y_train, "y_test": y_test}
+    split_dataset = {"dataset": my_candidates_df, "X_train": X_train, "X_test": X_test, "y_train": y_train,
+                     "y_test": y_test}
 
-    with open(f'../data/split_dataset.pickle', 'wb') as ds:
-        pickle.dump(split_dataset, ds, protocol=pickle.HIGHEST_PROTOCOL)
-
-    # paths = [file for file in os.listdir(SCAN_PATH) if file.endswith(".mhd")]
-    # s = sitk.ReadImage(os.path.join(SCAN_PATH, paths[2]))
-    # image = sitk.GetArrayFromImage(s)
-    # # df[(df.seriesuid == paths[2][:-4]) &  (df["class"] == 1)]
+    with open(f'../data/split_dataset.pickle', 'wb') as output_file:
+        pickle.dump(split_dataset, output_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
