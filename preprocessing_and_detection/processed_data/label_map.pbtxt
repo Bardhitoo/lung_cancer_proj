@@ -1,0 +1,9 @@
+item {
+    id: 1
+    name: 'Benign'
+}
+
+item {
+    id: 2
+    name: 'Malignant'
+}
