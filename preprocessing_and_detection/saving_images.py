@@ -15,30 +15,17 @@ import matplotlib.patches as patches
 DATA = "../data/"
 SCAN_PATH = DATA + "subset0"
 TRAIN_DATA_PATH = DATA + "split_dataset.pickle"
-SAVE_IMG = DATA + "subset0_3D_2_train_test_split/"
+EXPERIMENT_NAME = "subset0_3D_2mm"
+SAVE_IMG = DATA + f"{EXPERIMENT_NAME}_train_test_split/"
+
+if not os.path.exists(SAVE_IMG):
+    os.mkdir(SAVE_IMG)
 
 if not os.path.exists(SAVE_IMG + "train"):
     os.mkdir(SAVE_IMG + "train")
 
 if not os.path.exists(SAVE_IMG + "test"):
     os.mkdir(SAVE_IMG + "test")
-
-
-def _bytes_feature(value):
-    """Returns a bytes_list from a string / byte."""
-    if isinstance(value, type(tf.constant(0))):
-        value = value.numpy()  # BytesList won't unpack a string from an EagerTensor.
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
-
-
-def _float_feature(value):
-    """Returns a float_list from a float / double."""
-    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
-
-
-def _int64_feature(value):
-    """Returns an int64_list from a bool / enum / int / uint."""
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 
 def normalizePlanes(npzarray):
@@ -74,7 +61,6 @@ def main():
     y_train = train_test_split_dict["y_train"]
     X_test = train_test_split_dict["X_test"]
     y_test = train_test_split_dict["y_test"]
-
     for dataset, dataset_name in zip([X_train, X_test], ["train", "test"]):
         df = pd.DataFrame(columns=dataset.columns)
         seen = {}
@@ -85,6 +71,12 @@ def main():
             print(f"Processing: {dataset_name} - {counter} / {len(dataset) - 1}")
             sample_name = row["seriesuid"]
             s = sitk.ReadImage(os.path.join(SCAN_PATH, sample_name + ".mhd"))
+
+            # === Get only CT scans whose resolution in z-axis is greater than 2 ===
+            # From the exploratory analysis there were only a number of participants
+            # Who had 2.5mm resolution across the z-axis
+            if s.GetSpacing()[2] <= 2:
+                continue
 
             if sample_name in seen:
                 seen[sample_name] = seen[sample_name] + 1
@@ -113,8 +105,7 @@ def main():
             cv2.imwrite(image_path, image_normalized * 255)
 
             df.loc[len(df.index)] = [sample_name, x_, y_, z]
-        df.to_csv(f"processed_data/{dataset_name}_3D_2_transformed_coords.csv")
-
+        df.to_csv(f"processed_data/{dataset_name}_{EXPERIMENT_NAME}_transformed_coords.csv")
 
 def get_image_coords(s, row):
     real_world_coords = row[1:].tolist()
