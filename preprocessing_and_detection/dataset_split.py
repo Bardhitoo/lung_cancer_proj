@@ -7,10 +7,7 @@ import pickle
 matplotlib.use('TkAgg')  # TODO: Experiment this on another env. of conda
 
 from sklearn.model_selection import train_test_split
-
-SCAN_PATH = "../data/subset0"
-CANDIDATE_FILE_PATH = "../data/candidates_V2.csv"
-
+from my_records import *
 
 def main():
     def filter_no_downloads(df, path):

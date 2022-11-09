@@ -6,10 +6,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-DATA = "../data/"
-SCAN_PATH = DATA + "subset0"
-DATA_PATH = DATA + "split_dataset.pickle"
-SAVE_IMG = DATA + "subset0_3D_2_train_test_split"
+from my_records import *
 
 
 def _bytes_feature(value):
@@ -33,7 +30,7 @@ def write_tf_record(imgs_path, X, y, dataset_name):
     """Generates TFRecord file from given list of annotations."""
 
     out = f"./processed_data/{dataset_name}_2_3D.tfrecord"
-    width = 50
+    width = 40
     label_names = {0: [1, "Benign"], 1: [2, "Malignant"]}
     image_dimension = 512
     seen = {}
@@ -78,13 +75,10 @@ def write_tf_record(imgs_path, X, y, dataset_name):
 
 
 def main():
-    with open(DATA_PATH, "rb") as input_file:
-        train_test_split_dict = pickle.load(input_file)
-
     for annotations_name in ["train", "test"]:
-        # X = train_test_split_dict[f"X_{annotations_name}"]
-        X = pd.read_csv(f"./processed_data/{annotations_name}_3D_2_transformed_coords.csv")
-        y = train_test_split_dict[f"y_{annotations_name}"]
+        dataset = pd.read_csv(f"./processed_data/{annotations_name}_{EXPERIMENT_NAME}_transformed_coords.csv")
+        X = dataset.iloc[:, :-1]
+        y = dataset.iloc[:, -1]
 
         write_tf_record(SAVE_IMG, X, y, annotations_name)
 
