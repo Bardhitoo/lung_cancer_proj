@@ -35,10 +35,11 @@ The first step is to process the data and create an image database for training.
 *Evaluate Model:
 `python model_main_tf2.py --pipeline_config_path="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\pipeline.config" --model_dir="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\v0.3"   --checkpoint_dir="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\v0.3" --run_once`
 
-*Track the models:
+*Track Model:
 `tensorboard --logdir="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32" // <path to a directory with your experiment / experiments>`
 
-
+*Export Model:
+`python exporter_main_v2.py --input_type=image_tensor --trained_checkpoint_dir="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\v0.6_3D_2_gamma_2.5_alpha_0.75" --pipeline_config_path="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\pipeline_3D_2.config" --output_directory="C:\Users\bardh\tensorflow\model_zoo\efficientdet_d0_coco17_tpu-32\v0.6_3D_2_gamma_2.5_alpha_0.75\exported_models"`
 - TODO:
     - Separate positive & negative cases by patient id's. Dont want to have samples of patients split into train and test
 
