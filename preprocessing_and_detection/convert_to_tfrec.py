@@ -1,12 +1,9 @@
 import os
-import pickle
-import SimpleITK as sitk
-import numpy as np
 
 import pandas as pd
 import tensorflow as tf
 
-from my_records import *
+from preprocessing_and_detection.utils.my_utils import *
 
 
 def _bytes_feature(value):
@@ -29,7 +26,7 @@ def _int64_feature(value):
 def write_tf_record(imgs_path, X, y, dataset_name):
     """Generates TFRecord file from given list of annotations."""
 
-    out = f"./processed_data/{dataset_name}_2_3D.tfrecord"
+    out = f"./processed_data/{dataset_name}_{EXPERIMENT_NAME}.tfrecord"
     width = 40
     label_names = {0: [1, "Benign"], 1: [2, "Malignant"]}
     image_dimension = 512
@@ -67,8 +64,8 @@ def write_tf_record(imgs_path, X, y, dataset_name):
             features['image/object/bbox/ymax'] = _float_feature(ymax / image_dimension)
 
             # label from [0, 2) iterval
-            features['image/object/class/label'] = _int64_feature(label_names[y.iloc[index]][0])
-            features['image/object/class/text'] = _bytes_feature(label_names[y.iloc[index]][1].encode('utf8'))
+            features['image/object/class/label'] = _int64_feature(label_names[int(y.iloc[index])][0])
+            features['image/object/class/text'] = _bytes_feature(label_names[int(y.iloc[index])][1].encode('utf8'))
 
             example = tf.train.Example(features=tf.train.Features(feature=features))
             writer.write(example.SerializeToString())
@@ -77,8 +74,8 @@ def write_tf_record(imgs_path, X, y, dataset_name):
 def main():
     for annotations_name in ["train", "test"]:
         dataset = pd.read_csv(f"./processed_data/{annotations_name}_{EXPERIMENT_NAME}_transformed_coords.csv")
-        X = dataset.iloc[:, :-1]
-        y = dataset.iloc[:, -1]
+        X = dataset.loc[:, dataset.columns != "class"]
+        y = dataset["class"]
 
         write_tf_record(SAVE_IMG, X, y, annotations_name)
 
