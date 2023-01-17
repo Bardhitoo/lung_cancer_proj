@@ -24,11 +24,11 @@ Conclusion
 
 NoduleNet:
 
-![](my_figs/groundtruth.gif) ![](my_figs/prediction.gif)
+![demo](my_figs/groundtruth.gif) ![demo](my_figs/prediction.gif)
 
 3D Visualization:
 
-![](my_figs/3d_nodule.gif)
+![demo](my_figs/3d_nodule.gif)
 
 The combination of these three steps allows for the accurate and efficient identification of lung nodules and the determination of their potential risk to the patient. This pipeline can be used to aid radiologists in the detection and diagnosis of lung cancer.
 
