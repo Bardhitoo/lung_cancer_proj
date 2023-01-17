@@ -7,7 +7,7 @@ import SimpleITK as sitk
 
 class CTScan:
     def __init__(self, path):
-        assert os.path.exists(path)
+        assert os.path.exists(path)  # f"Path does not exist! {path}"
         self.path = path
         self.s = None
         self.image = None
@@ -26,4 +26,3 @@ class CTScan:
             self.load_image()
         normalized_slice = normalise_planes(self.image[slice_num, :, :])
         return normalized_slice
-

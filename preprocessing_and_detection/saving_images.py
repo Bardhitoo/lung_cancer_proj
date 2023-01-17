@@ -21,7 +21,7 @@ if not os.path.exists(SAVE_IMG + "test"):
 
 
 def main():
-    with open(TRAIN_DATA_PATH, "rb") as input_file:
+    with open(SAVE_SPLIT_PATH, "rb") as input_file:
         train_test_split_dict = pickle.load(input_file)
 
     dataset = train_test_split_dict["dataset"]
@@ -56,14 +56,15 @@ def main():
 
             x_, y_, z = get_image_coords(sample_objt, sample)
 
-            image_slice_m1 = image[int(z) - 1, :, :]
-            image_slice_0 = image[int(z), :, :]
-            image_slice_p1 = image[int(z) + 1, :, :]
+            dist = 1  # round(2. / sample_objt.GetSpacing()[2])
+            image_slice_m1 = image[round(z) - dist, :, :]
+            image_slice_0 = image[round(z), :, :]
+            image_slice_p1 = image[round(z) + dist, :, :]
 
             # viz_bounding_box(image_slice_m1, x_, y_, width=40)
             # viz_bounding_box(image_slice_0, x_, y_, width=40)
             # viz_bounding_box(image_slice_p1, x_, y_, width=40)
-
+            # viz_bounding_box(image_normalized, x_, y_, labels[index], width=40)
             image_m1_normalized = normalise_planes(image_slice_m1)
             image_0_normalized = normalise_planes(image_slice_0)
             image_p1_normalized = normalise_planes(image_slice_p1)

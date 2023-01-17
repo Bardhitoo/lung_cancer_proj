@@ -23,7 +23,7 @@ class DetectorTF2:
         self.detect_fn = tf.saved_model.load(path_to_checkpoint)
 
     def DetectFromImage(self, img):
-        _, im_height, im_width = img.shape
+        im_height, im_width, im_channel = img.shape
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
         input_tensor = np.expand_dims(img, 0)
         detections = self.detect_fn(input_tensor)
@@ -36,30 +36,33 @@ class DetectorTF2:
         return det_boxes
 
     def ExtractBBoxes(self, bboxes, bclasses, bscores, im_width, im_height):
-        bbox = []
+        det = {"bbox": [], "class_label": [], "bscores": []}
         for idx in range(len(bboxes)):
             if self.class_id is None or bclasses[idx] in self.class_id:
                 if bscores[idx] >= self.threshold:
-                    y_min = int(bboxes[idx][0] * im_height)
-                    x_min = int(bboxes[idx][1] * im_width)
-                    y_max = int(bboxes[idx][2] * im_height)
-                    x_max = int(bboxes[idx][3] * im_width)
-                    class_label = self.category_index[int(bclasses[idx])]['name']
-                    bbox.append([x_min, y_min, x_max, y_max, class_label, float(bscores[idx])])
-        return bbox
+                    y_min = int(bboxes[-idx][0] * im_height)
+                    x_min = int(bboxes[-idx][1] * im_width)
+                    y_max = int(bboxes[-idx][2] * im_height)
+                    x_max = int(bboxes[-idx][3] * im_width)
 
-    def DisplayDetections(self, image, dimension, boxes_list, det_time=None):
-        if not boxes_list: return image  # input list is empty
+                    det['bbox'].append([x_min, y_min, x_max, y_max])
+                    det["class_label"].append(self.category_index[int(bclasses[-idx])]['name'])
+                    det["bscores"].append(float(bscores[idx]))
+        return det
+
+    def DisplayDetections(self, image, dimension, det, det_time=None):
+        if not det['bbox']: return image  # input list is empty
         img = image.copy()
-        for idx in range(len(boxes_list)):
-            x_min = boxes_list[idx][0] * dimension
-            y_min = boxes_list[idx][1] * dimension
-            x_max = boxes_list[idx][2] * dimension
-            y_max = boxes_list[idx][3] * dimension
-            cls = str(boxes_list[idx][4])
-            score = str(np.round(boxes_list[idx][-1], 2))
+        for idx in range(len(det['bbox'])):
+            x_min = det["bbox"][idx][0]
+            y_min = det["bbox"][idx][1]
+            x_max = det["bbox"][idx][2]
+            y_max = det["bbox"][idx][3]
+            cls = str(det["class_label"][idx])
+            score = str(np.round(det["bscores"][idx], 4))
 
             text = cls + ": " + score
+
             cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (0, 255, 0), 1)
             cv2.rectangle(img, (x_min, y_min - 20), (x_min, y_min), (255, 255, 255), -1)
             cv2.putText(img, text, (x_min + 5, y_min - 7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)

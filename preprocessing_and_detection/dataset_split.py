@@ -25,7 +25,11 @@ def main():
     # Filter out instances that I don't have on my local machine
     my_candidates_1 = filter_no_downloads(total_candidates, "subset0")
     my_candidates_2 = filter_no_downloads(total_candidates, "subset1")
-    my_candidates = pd.concat([my_candidates_1, my_candidates_2], axis=0)
+    my_candidates_3 = filter_no_downloads(total_candidates, "subset2")
+    my_candidates_4 = filter_no_downloads(total_candidates, "subset3")
+    # my_candidates_5 = filter_no_downloads(total_candidates, "subset4")
+    # my_candidates_6 = filter_no_downloads(total_candidates, "subset5")
+    my_candidates = pd.concat([my_candidates_1, my_candidates_2, my_candidates_3, my_candidates_4], axis=0)
 
     #  TODO: Separate positive & negative cases by patient id
     # Dont want to have samples of patients split into train and test
@@ -49,7 +53,7 @@ def main():
     split_dataset = {"dataset": my_candidates_df, "X_train": X_train, "X_test": X_test, "y_train": y_train,
                      "y_test": y_test}
 
-    with open(f'../data/split_dataset.pickle', 'wb') as output_file:
+    with open(SAVE_SPLIT_PATH, 'wb') as output_file:
         pickle.dump(split_dataset, output_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 
