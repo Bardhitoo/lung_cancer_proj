@@ -24,12 +24,11 @@ Conclusion
 
 NoduleNet:
 
-![demo](my_figs/groundtruth.gif = 500x500) ![demo](my_figs/prediction.gif)
+<img src="my_figs/prediction.gif" width="300"> <img src="my_figs/groundtruth.gif" width="300"> 
 
 3D Visualization:
 
-![demo](my_figs/3d_nodule.gif)
-
+<img src="my_figs/3d_nodule.gif" width="300">
 The combination of these three steps allows for the accurate and efficient identification of lung nodules and the determination of their potential risk to the patient. This pipeline can be used to aid radiologists in the detection and diagnosis of lung cancer.
 
 ## Author
