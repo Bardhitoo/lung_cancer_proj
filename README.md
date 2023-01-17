@@ -22,11 +22,11 @@ The data used for these experiments is the [LUNA16](https://luna16.grand-challen
 Our final results developed in our project are an extension of the work developed by the NoduleNet team at University of California Irvine, specifically in the areas of prediction post-processing and visualization. To achieve this, we made minor adjustments and developed python scripts to be integrated into the NoduleNet codebase, which allowed the model to work seamlessly on our machine. These modifications were necessary to ensure that the model was optimized for our specific dataset and computing resources.
 Conclusion
 
-NoduleNet:
+### NoduleNet:
 
-<img src="my_figs/prediction.gif" width="350"> <img src="my_figs/groundtruth.gif" width="350"> 
+<img src="my_figs/prediction.gif" width="400"> <img src="my_figs/groundtruth.gif" width="400"> 
 
-3D Visualization:
+### 3D Visualization:
 
 <img src="my_figs/3d_nodule.gif" width="400">
 The combination of these three steps allows for the accurate and efficient identification of lung nodules and the determination of their potential risk to the patient. This pipeline can be used to aid radiologists in the detection and diagnosis of lung cancer.
