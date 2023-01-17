@@ -24,7 +24,7 @@ Conclusion
 
 NoduleNet:
 
-![demo](my_figs/groundtruth.gif) ![demo](my_figs/prediction.gif)
+![demo](my_figs/groundtruth.gif = 500x500) ![demo](my_figs/prediction.gif)
 
 3D Visualization:
 
