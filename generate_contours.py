@@ -1,7 +1,6 @@
-from NoduleNet.config import config
-from NoduleNet.utils.util import *
 import nrrd
-import os
+
+from NoduleNet.utils.util import *
 
 if not os.path.exists("./3d_contours"):
     os.mkdir("./3d_contours")
