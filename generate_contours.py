@@ -1,8 +1,10 @@
+from NoduleNet.config import config
+from NoduleNet.utils.util import *
 import nrrd
-from utils.util import *
-from config import config
-if not os.path.exists("./BARDH/3d_contours"):
-    os.mkdir("./BARDH/3d_contours")
+import os
+
+if not os.path.exists("./3d_contours"):
+    os.mkdir("./3d_contours")
 
 
 def get_contours(img_res, nodule: pd.Series, pred: np.array):
@@ -38,11 +40,10 @@ def load_mask(data_dir, filename):
 
 
 data_dir = config['DATA_DIR']
-out_dir = os.path.join(config["out_dir"])
-load_dir = os.path.join(out_dir, 'res', str(200))
+load_dir = os.path.join(config["ROOT_DIR"], "NoduleNet", "results", "cross_val_test", "res", str(200))
+rpns = pd.read_csv(load_dir + "\\FROC\\submission_rpn.csv")
 
-rpns = pd.read_csv(load_dir + "\FROC\submission_rpn.csv")
-
+THRESHOLD = 0.99
 for uid in rpns.seriesuid.unique():
     image = load_img(data_dir, uid)
     normalized_img = normalize(image[0])
@@ -58,7 +59,7 @@ for uid in rpns.seriesuid.unique():
 
     # get the row of the highest prediction
     uid_nodules = rpns[(rpns.seriesuid == uid)]
-    uid_max_prob = uid_nodules[uid_nodules.probability >= 0.99]
+    uid_max_prob = uid_nodules[uid_nodules.probability >= THRESHOLD]
     print(f"\nContours of {uid}")
     for idx, nodule in uid_max_prob.iterrows():
         # bbox must be of [coordZ, coordY, coordX]
@@ -69,6 +70,6 @@ for uid in rpns.seriesuid.unique():
 
         nodule_contour = get_contours(image[0].shape, nodule, pred)
 
-        print(f"\tSaving contour {idx} of {uid}")
-        np.save(f"BARDH/3d_contours/{uid}_{idx}.npy", nodule_contour)
+        print(f"\tSaving contours {idx} of {uid}...")
+        np.save(f"3d_contours/{uid}_{idx}.npy", nodule_contour)
     exit()
