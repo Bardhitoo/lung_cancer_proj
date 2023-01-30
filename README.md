@@ -31,6 +31,17 @@ Conclusion
 <img src="my_figs/3d_nodule.gif" width="400">
 The combination of these three steps allows for the accurate and efficient identification of lung nodules and the determination of their potential risk to the patient. This pipeline can be used to aid radiologists in the detection and diagnosis of lung cancer.
 
+
+## How to Run:
+1. `cd NoduleNet/`
+2. Follow the instructions on how to run the `NoduleNet` (details can be found in the repository above)
+    - After evaluating, results are generated in `./NoduleNet/results/cross_val_test/res/200/`
+3. run `generate_contours.py`, will generate 2D contours 
+    - This will only generate contours for only 1 patient.
+4. run `3d_nodule_viz.py` 
+    - Run through conda command prompt for interactive interface.
+
+
 ## Author
 Bardh Rushiti {br3004@rit.edu}
 
