@@ -73,7 +73,7 @@ def nodule_3d_viz(nodule_mask, title, edgecolor='0.2', cmap='cool', step=1, figs
 
 
 if "__main__" == __name__:
-    nodule_path = r"C:\Users\bardh\Desktop\2021\RIT_CS\sem_2\independent_study\NoduleNet\BARDH\3d_contours"
+    nodule_path = r"3d_contours/"
     for nodule_name in os.listdir(nodule_path):
         title = "Patient ID: "+nodule_name[:-6]
         nodule = np.load(os.path.join(nodule_path, nodule_name))
