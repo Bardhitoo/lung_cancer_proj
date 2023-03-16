@@ -7,7 +7,7 @@ This project aims to develop a three-step pipeline for detecting lung nodules, s
 2. Segmentation: Isolating and outlining the detected nodules
 3. 3D Reconstruction: Creating a three-dimensional model of the nodules for analysis
 
-The solution employs 3D-CNN and multi-task learning to achieve high accuracy in both classification and segmentation. The model is then used to analyze the nodules for signs of malignancy, such as irregular shape or size.
+The solution employs 3D-CNN and multi-task learning to achieve high accuracy in both classification and segmentation. The model is then used to analyze the nodules for signs of malignancy, such as irregular shape or size. This work is an extension of [NoduleNet](https://github.com/uci-cbcl/NoduleNet).
 
 ## Background
 Lung cancer detection and diagnosis remains a significant challenge in the medical field. Early detection is crucial for successful treatment, but the identification of lung nodules, small growths on the lung tissue, can be difficult due to their size and location. Computed tomography (CT) scans are commonly used for detecting lung nodules, but manually identifying these nodules in CT scans can be a lengthy and laborious process for radiologists. Accurate and precise segmentation of nodules can provide more detailed information about their shape, size, and rate of change, which can be useful for diagnosis and treatment planning.
